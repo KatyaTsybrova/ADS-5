@@ -18,67 +18,96 @@ static int checkEl(char el) {
 }
 
 std::string infx2pstfx(std::string inf) {
-  std::string pst = "";
-    TStack<char, 100> s;
+  std::string postfix = "";
+  TStack<char, 100> s;
 
-    for (int i = 0; i < inf.length(); i++) {
-        if (isalnum(inf[i]) {
-            pst += inf[i];
-          if (i != inf.length() - 1) {
-            pst += " "; 
-          }
-        } else if (inf[i] == '(') {
-            s.push(inf[i]);
-        } else if (inf[i] == ')') {
-            while (!s.empty() && s.top() != '(') {
-                pst += s.top();
-                s.pop();
-            }
-            s.pop();
-        } else {
-            while (!s.empty() && checkEl(s.top()) >= checkEl(inf[i])) {
-                pst += s.top();
-                s.pop();
-            }
-            s.push(inf[i]);
-        }
+  for (int i = 0; i < inf.length(); i++) {
+    if (isdigit(inf[i])) {
+      postfix += inf[i];
+      if (i != inf.length() - 1) {
+        postfix += " ";
+      }
+    } else if (inf[i] == '(') {
+      s.push(inf[i]);
+    } else if (s.empty()) {
+      s.push(inf[i]);
+    } else if (inf[i] == ')') {
+      if (s.empty()) {
+        break;
+      } else if (s.top() == '(') {
+        break;
+      }
+      postfix += s.top();
+      s.pop();
+      if (i != inf.length() - 1) {
+        postfix += " ";
+      }
     }
-
-    while (!s.empty()) {
-        pst += s.top();
-        s.pop();
+    s.pop();
+  } else if (checkEl(inf[i]) > checkEl(s.top())) {
+    s.push(inf[i]);
+  } else {
+    while (true) {
+      if (s.empty()) {
+        break;
+      } else if (!(checkEl(inf[i]) <= checkEl(s.top()))) {
+        break;
+      }
+      postfix += s.top();
+      s.pop();
+      if (i != inf.length() - 1) {
+        postfix += " ";
+      }
     }
-  return std::string("");
+    s.push(inf[i]);
+  }
+}
+while (!s.empty()) {
+  postfix += " ";
+  postfix += s.top();
+  s.pop();
+}
+return postfix;            
 }
 
 int eval(std::string pref) {
   std::string time = "";
-  TStack<int, 100> s;
+  TStack<int, 100> operands;
 
-    for (int i = 0; i < pref.length(); i++) {
-        if (isdigit(pref[i])) {
-            s.push(pref[i] - '0');
-        } else {
-            int operand2 = s.top();
-            s.pop();
-            int operand1 = s.top();
-            s.pop();
-
-            switch (pref[i]) {
-                case '+':
-                    s.push(operand1 + operand2);
-                    break;
-                case '-':
-                    s.push(operand1 - operand2);
-                    break;
-                case '*':
-                    s.push(operand1 * operand2);
-                    break;
-                case '/':
-                    s.push(operand1 / operand2);
-                    break;
-            }
+  for (int i = 0; i < pref.length(); i++) {
+    if (isdigit(pref[i])) {
+      time += pref[i];
+    } else if (time.length() && pref[i] == ' ') {
+      ints.push(atoi(time.c_str()));
+      time = "";
+    } else {
+      switch (pref[i]) {
+        case '+': {
+          int two = operands.pop();
+          int one = operands.pop();
+          operands.push(one + two);
+          break;
         }
+        case '-': {
+          int two = operands.pop();
+          int one = operands.pop();
+          operands.push(one - two);
+          break;
+        }
+        case '*': {
+          int two = operands.pop();
+          int one = operands.pop();
+          operands.push(one * two);
+          break;
+        }
+        case '/': {
+          int two = operands.pop();
+          int one = operands.pop();
+          operands.push(one / two);
+          break;
+        }
+      }
     }
-    return s.top();
+  }
+  return operands.pop();
 }
