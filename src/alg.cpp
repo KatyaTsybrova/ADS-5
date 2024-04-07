@@ -29,45 +29,46 @@ std::string infx2pstfx(std::string inf) {
       }
     } else if (inf[i] == '(') {
       s.push(inf[i]);
-    } else if (s.empty()) {
+    } else if (s.isempty()) {
       s.push(inf[i]);
     } else if (inf[i] == ')') {
-      if (s.empty()) {
-        break;
-      } else if (s.top() == '(') {
-        break;
+      while (true) {
+        if (s.isempty()) {
+          break;
+        } else if (s.top() == '(') {
+          break;
+        }
+        postfix += s.top();
+        s.pop();
+        if (i != inf.length() - 1) {
+          postfix += " ";
+        }
       }
-      postfix += s.top();
       s.pop();
-      if (i != inf.length() - 1) {
-        postfix += " ";
+    } else if (checkEl(inf[i]) > checkEl(s.top())) {
+      s.push(inf[i]);
+    } else {
+      while (true) {
+        if (s.isempty()) {
+          break;
+        } else if (!(checkEl(inf[i]) <= checkEl(s.top()))) {
+          break;
+        }
+        postfix += s.top();
+        s.pop();
+        if (i != inf.length() - 1) {
+          postfix += " ";
+        }
       }
+      s.push(inf[i]);
     }
-    s.pop();
-  } else if (checkEl(inf[i]) > checkEl(s.top())) {
-    s.push(inf[i]);
-  } else {
-    while (true) {
-      if (s.empty()) {
-        break;
-      } else if (!(checkEl(inf[i]) <= checkEl(s.top()))) {
-        break;
-      }
-      postfix += s.top();
-      s.pop();
-      if (i != inf.length() - 1) {
-        postfix += " ";
-      }
-    }
-    s.push(inf[i]);
   }
-}
-while (!s.empty()) {
-  postfix += " ";
-  postfix += s.top();
-  s.pop();
-}
-return postfix;            
+  while (!s.isempty()) {
+    postfix += " ";
+    postfix += s.top();
+    s.pop();
+  }
+  return postfix;
 }
 
 int eval(std::string pref) {
@@ -78,7 +79,7 @@ int eval(std::string pref) {
     if (isdigit(pref[i])) {
       time += pref[i];
     } else if (time.length() && pref[i] == ' ') {
-      ints.push(atoi(time.c_str()));
+      operands.push(atoi(time.c_str()));
       time = "";
     } else {
       switch (pref[i]) {
