@@ -35,11 +35,10 @@ std::string infx2pstfx(std::string inf) {
       while (true) {
         if (s.isempty()) {
           break;
-        } else if (s.top() == '(') {
+        } else if (s.check() == '(') {
           break;
         }
-        postfix += s.top();
-        s.pop();
+        postfix += s.pop();
         if (i != inf.length() - 1) {
           postfix += " ";
         }
@@ -54,8 +53,7 @@ std::string infx2pstfx(std::string inf) {
         } else if (!(checkEl(inf[i]) <= checkEl(s.top()))) {
           break;
         }
-        postfix += s.top();
-        s.pop();
+        postfix += s.pop();
         if (i != inf.length() - 1) {
           postfix += " ";
         }
@@ -65,8 +63,7 @@ std::string infx2pstfx(std::string inf) {
   }
   while (!s.isempty()) {
     postfix += " ";
-    postfix += s.top();
-    s.pop();
+    postfix += s.pop();
   }
   return postfix;
 }
