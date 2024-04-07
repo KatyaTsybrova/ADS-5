@@ -3,15 +3,18 @@
 #include <map>
 #include "tstack.h"
 
-using namespace std;
-
-int precedence(char op) {
-    if (op == '+' || op == '-') {
-        return 1;
-    } else if (op == '*' || op == '/') {
-        return 2;
-    }
+static int checkEl(char el) {
+  if (el == '(') {
     return 0;
+  } else if (el == ')') {
+    return 1;
+  } else if ((el == '+') || (el == '-')) {
+    return 2;
+  } else if ((el == '*') || (el == '/')) {
+    return 3;
+  } else {
+    throw "Unknown Symbol!";
+  }
 }
 
 std::string infx2pstfx(std::string inf) {
@@ -30,7 +33,7 @@ std::string infx2pstfx(std::string inf) {
             }
             s.pop();
         } else {
-            while (!s.empty() && precedence(s.top()) >= precedence(c)) {
+            while (!s.empty() && checkEl(s.top()) >= checkEl(c)) {
                 pst += s.top();
                 s.pop();
             }
