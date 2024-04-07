@@ -44,13 +44,13 @@ std::string infx2pstfx(std::string inf) {
         }
       }
       s.pop();
-    } else if (checkEl(inf[i]) > checkEl(s.top())) {
+    } else if (checkEl(inf[i]) > checkEl(s.check())) {
       s.push(inf[i]);
     } else {
       while (true) {
         if (s.isempty()) {
           break;
-        } else if (!(checkEl(inf[i]) <= checkEl(s.top()))) {
+        } else if (!(checkEl(inf[i]) <= checkEl(s.check()))) {
           break;
         }
         postfix += s.pop();
