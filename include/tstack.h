@@ -6,7 +6,7 @@ template <typename T, int size>
 class TStack {
  private:
   T *data = new T[size];
-  int top = 0;
+  int top = 0, size = 100;
 
  public:
   TStack() {
