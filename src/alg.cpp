@@ -18,26 +18,29 @@ static int checkEl(char el) {
 }
 
 std::string infx2pstfx(std::string inf) {
-  string pst = "";
-    stack<char> s;
+  std::string pst = "";
+    TStack<char, 100> s;
 
-    for (char c : inf) {
-        if (isalnum(c)) {
-            pst += c;
-        } else if (c == '(') {
-            s.push(c);
-        } else if (c == ')') {
+    for (int i = 0; i < inf.length(); i++) {
+        if (isalnum(inf[i]) {
+            pst += inf[i];
+          if (i != inf.length() - 1) {
+            pst += " "; 
+          }
+        } else if (inf[i] == '(') {
+            s.push(inf[i]);
+        } else if (inf[i] == ')') {
             while (!s.empty() && s.top() != '(') {
                 pst += s.top();
                 s.pop();
             }
             s.pop();
         } else {
-            while (!s.empty() && checkEl(s.top()) >= checkEl(c)) {
+            while (!s.empty() && checkEl(s.top()) >= checkEl(inf[i])) {
                 pst += s.top();
                 s.pop();
             }
-            s.push(c);
+            s.push(inf[i]);
         }
     }
 
@@ -49,18 +52,19 @@ std::string infx2pstfx(std::string inf) {
 }
 
 int eval(std::string pref) {
-  stack<int> s;
+  std::string time = "";
+  TStack<int, 100> s;
 
-    for (char c : post) {
-        if (isdigit(c)) {
-            s.push(c - '0');
+    for (int i = 0; i < pref.length(); i++) {
+        if (isdigit(pref[i])) {
+            s.push(pref[i] - '0');
         } else {
             int operand2 = s.top();
             s.pop();
             int operand1 = s.top();
             s.pop();
 
-            switch (c) {
+            switch (pref[i]) {
                 case '+':
                     s.push(operand1 + operand2);
                     break;
