@@ -4,7 +4,28 @@
 
 template<typename T, int size>
 class TStack {
-  // добавьте код стека
+  private:
+    T *stack;
+    int top;
+public:
+    TStack() {
+        stack = new T[size];
+        top = -1;
+    }
+    ~TStack() {
+        delete[] stack;
+    }
+    void push(T val) {
+        stack[++top] = val;
+    }
+    T pop() {
+        return stack[top--];
+    }
+    T peek() {
+        return stack[top];
+    }
+    bool isEmpty() {
+        return top == -1;
+    }
 };
-
 #endif  // INCLUDE_TSTACK_H_
